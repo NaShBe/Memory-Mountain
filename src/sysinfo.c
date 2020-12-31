@@ -15,7 +15,7 @@ void fill_data_sys(data_sys_t** data)
 
 static void _perf_data_sys_coll(data_sys_t** _data)
 {
-    #if defined(__unix__) || defined(__APPLE__) && defined(__MACH__)
+    #if defined(__APPLE__) && defined(__MACH__)
         #include <sys/sysctl.h>
         #if defined (_SYS_SYSCTL_H_)
             #define SYSCTL_QUEUE_COUNT 2
@@ -38,7 +38,12 @@ static void _perf_data_sys_coll(data_sys_t** _data)
         #endif
     #elif defined(_WIN32)
         #include <windows.h>
-
+        SYSTEM_INFO sys_info;
+        #ifdef _WIN64
+            GetSystemInfo(sys_info);
+        #else
+            GetNativeSystemInfo(sys_info);
+        #endif
         
     #else
         #error There's no implementation for data collection of your current OS.
