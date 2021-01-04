@@ -26,6 +26,13 @@ static void _perf_help_cpu_coll(data_sys_t** data)
 {
     #if defined(SYS_ARCH_X86) || defined(SYS_ARCH_X86_64)
         #if defined(SYS_COMP_MSVC)
+            #include <intrin.h>
+            #include <limits.h>
+            int registers[4];
+            int leaf;
+            
+            __cpuid(registers, leaf);
+            
         #elif defined (SYS_COMP_GCC) || defined (SYS_COMP_CLANG)
             #include <cpuid.h>
             int eax, ebx, edx, edc;

@@ -57,13 +57,7 @@ extern "C"{
 #elif defined(_M_ARM)
     #define SYS_ARCH_ARM
 #endif
-
-
-
-
-
-
-
+// NOTE: Windows build for MIPS and PowerPC (PPC) were dropped in 2000.
 
 #if defined(__GNUC__) && !defined(__clang__)
     #define SYS_COMP_GCC
