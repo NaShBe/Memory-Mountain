@@ -1,8 +1,12 @@
 #include "include/sysinfo.h"
+#include "include/port.h"
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include <assert.h>
 
 static const data_sys_t _null_data_sys = {NULL, 0, NULL, 0, NULL, 0, NULL, 0, 0, 0, 0.0, 0, NULL};
+static const char str_unknown[] = "Undetermined";
 data_sys_t* get_data_sys()
 {
     return NULL;
@@ -15,38 +19,27 @@ void fill_data_sys(data_sys_t** data)
 
 static void _perf_data_sys_coll(data_sys_t** _data)
 {
-    #if defined(__APPLE__) && defined(__MACH__)
-        #include <sys/sysctl.h>
-        #if defined (_SYS_SYSCTL_H_)
-            #define SYSCTL_QUEUE_COUNT 2
-            #define SYSCTL_CTL_FLAG 0
-            #define SYSCTL_CTL_VAR 1
-            int sysctl_queue[SYSCTL_QUEUE_COUNT] = {CTL_HW, 0};
-            **_data = _null_data_sys;
-            _perf_help_sysctl_str(sysctl_queue, SYSCTL_QUEUE_COUNT, (*_data)->sys_cpu_name, &(*_data)->sys_cpu_name_len, HW_MACHINE);
-            _perf_help_sysctl_str(sysctl_queue, SYSCTL_QUEUE_COUNT, (*_data)->sys_model_name, &(*_data)->sys_model_name_len, HW_MODEL);
-            _perf_help_sysctl_int(sysctl_queue, SYSCTL_QUEUE_COUNT, (*_data)->sys_mem_size, sizeof((*_data)->sys_mem_size), HW_MEMSIZE);
-            _perf_help_sysctl_int(sysctl_queue, SYSCTL_QUEUE_COUNT, (*_data)->sys_cpu_count, sizeof((*_data)->sys_cpu_count), HW_NCPU);
-            _perf_help_sysctl_int(sysctl_queue, SYSCTL_QUEUE_COUNT, (*_data)->sys_cpu_frequency, sizeof((*_data)->sys_cpu_frequency), HW_CPU_FREQ);
-            sysctl_queue[SYSCTL_CTL_FLAG] = CTL_KERN;
-            _perf_help_sysctl_str(sysctl_queue, SYSCTL_QUEUE_COUNT, (*_data)->sys_os_type, &(*_data)->sys_os_type_len, KERN_OSTYPE);
-            _perf_help_sysctl_str(sysctl_queue, SYSCTL_QUEUE_COUNT, (*_data)->sys_os_vers, &(*_data)->sys_os_vers_len, KERN_OSRELEASE);
+    
+}
 
-        #else
-            #include <unistd.h>
-            
+static void _perf_help_cpu_coll(data_sys_t** data)
+{
+    #if defined(SYS_ARCH_X86) || defined(SYS_ARCH_X86_64)
+        #if defined(SYS_COMP_MSVC)
+        #elif defined (SYS_COMP_GCC) || defined (SYS_COMP_CLANG)
+            #include <cpuid.h>
+            int eax, ebx, edx, edc;
+            if (!(__get_cpuid(0, &eax, &ebx, &ecx, &edx)))
+            {
+                fprintf(stderr, " [!] __get_cpuid() produced an error");
+            }
+            else
+            {
+                
+            }
         #endif
-    #elif defined(_WIN32)
-        #include <windows.h>
-        SYSTEM_INFO sys_info;
-        #ifdef _WIN64
-            GetSystemInfo(sys_info);
-        #else
-            GetNativeSystemInfo(sys_info);
-        #endif
-        
     #else
-        #error There's no implementation for data collection of your current OS.
+        #error There is no data collection implementation for your current OS.
     #endif
 }
 
