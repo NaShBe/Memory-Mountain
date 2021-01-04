@@ -48,8 +48,14 @@ extern "C"{
 // MSC_VER macro checks
 #if defined(_M_IX86)
     #define SYS_ARCH_X86
+#elif defined(_M_X64) || defined(_M_AMD64)
+    #define SYS_ARCH_X86_64
 #elif defined(_M_PPC)
     #define SYS_ARCH_PPC
+#elif defined(_M_ARM64)
+    #define SYS_ARCH_ARM64
+#elif defined(_M_ARM)
+    #define SYS_ARCH_ARM
 #endif
 
 
@@ -64,14 +70,11 @@ extern "C"{
 #elif defined(__clang__)
     #define SYS_COMP_CLANG
 #elif defined(__MINGW32__) || defined(__MINGW64)
-
+    #define SYS_COMP_MINGW
 #elif defined(_MSC_VER)
-    #if defined (_M_IX86)
-    #define SYS_ARCH_X86
-    #endif
-
+    #define SYS_COMP_MSVC
 #elif defined(__INTEL_COMPILER) || defined(ICL)
-
+    #define SYS_COMP_ICC
 #endif
 
 #if defined(_WIN64) || defined(__WIN64__)

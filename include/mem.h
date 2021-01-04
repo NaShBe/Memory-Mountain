@@ -87,7 +87,8 @@ typedef struct data_datacollect_t
     data_dataset_t* coll_data;          // data sets
 } data_datacollect_t;
 
-
+extern data_datacollect_t* create_dynm_datacollect();
+extern void collect_data(data_datacollect_t*);
 
 #ifdef __cplusplus__
 }
