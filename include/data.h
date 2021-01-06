@@ -27,14 +27,18 @@ typedef enum data_mem_units_enum
     mem_units_megabytes,
     mem_units_gigabytes,
     mem_units_terabytes,
-    mem_units_petabytes
+    mem_units_petabytes,
+    mem_units_default
 } data_mem_units_enum;
 
 typedef enum data_time_units_enum
 {
     time_units_seconds,
     time_units_miliseconds,
-    time_units_clock_ticks
+    time_units_microseconds,
+    time_units_nanoseconds,
+    time_units_clock_ticks,
+    time_units_default
 } data_time_units_enum;
 
 typedef enum data_label_order_enum
@@ -44,7 +48,8 @@ typedef enum data_label_order_enum
     ZXY,
     ZYX,
     YZX,
-    YXZ
+    YXZ,
+    order_default
 } data_label_order_enum;
 
 typedef _USER_DATA_TYPE         data_arrval_t;  // user-defined data type for array
@@ -58,8 +63,8 @@ typedef char*                   data_charptr_t; // represents a standard charact
 
 typedef struct data_dataset_t
 {
-    data_size_t set_arr_size;           // independent variable: array size in bytes
-    data_size_t set_elem_stride;        // independent variable: array stride in bytes
+    const data_size_t set_arr_size;           // independent variable: array size in bytes
+    const data_size_t set_elem_stride;        // independent variable: array stride in bytes
     data_real_t set_read_throughput[];  // dependent variable: read throughput in bytes per second
 } data_dataset_t;
 
