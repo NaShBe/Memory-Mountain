@@ -63,8 +63,8 @@ typedef char*                   data_charptr_t; // represents a standard charact
 
 typedef struct data_dataset_t
 {
-    const data_size_t set_arr_size;           // independent variable: array size in bytes
-    const data_size_t set_elem_stride;        // independent variable: array stride in bytes
+    data_size_t set_arr_size;           // independent variable: array size in bytes
+    data_size_t set_elem_stride;        // independent variable: array stride in bytes
     data_real_t set_read_throughput[];  // dependent variable: read throughput in bytes per second
 } data_dataset_t;
 
@@ -84,14 +84,14 @@ typedef struct data_chartdetails_t
         data_int_t          start;
         data_int_t          skip;
         data_int_t          end;
-    };
+    } size_measure;
     struct stride_measure
     {
         data_mem_units_enum units;
         data_int_t          start;
         data_int_t          skip;
         data_int_t          end;
-    };
+    } stride_measure;
     struct time_measure
     {
         data_mem_units_enum     units;
@@ -99,7 +99,7 @@ typedef struct data_chartdetails_t
         data_int_t              start;
         data_int_t              skip;
         data_int_t              end;
-    };
+    } time_measure;
 } data_chartdetails_t;
 
 typedef struct data_chart_t
@@ -113,9 +113,9 @@ typedef struct data_chart_t
     data_label_order_enum   order;      // determines the orientation of the chart
 } data_chart_t;
 
-extern data_datacollect_t* create_dynm_datacollect(data_uint_t, data_size_t*, data_size_t*, data_uint_t);
+extern data_datacollect_t* create_dynm_datacollect(data_uint_t, data_uint_t, data_size_t*, data_size_t*);
 extern void collect_data(data_datacollect_t*);
-extern data_chart_t* create_dynm_chart(data_datacollect_t*);
+extern data_chart_t* create_dynm_chart(data_datacollect_t*, data_chartdetails_t, data_charptr_t, data_label_order_enum);
 
 #ifdef __cplusplus__
 }

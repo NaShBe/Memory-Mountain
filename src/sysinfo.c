@@ -35,8 +35,12 @@ static void _perf_help_cpu_coll(data_sys_t** data)
             
         #elif defined (SYS_COMP_GCC) || defined (SYS_COMP_CLANG)
             #include <cpuid.h>
-            int eax, ebx, edx, edc;
-            if (!(__get_cpuid(0, &eax, &ebx, &ecx, &edx)))
+            int registers[4];
+            int* const eax = &(registers[0]);
+            int* const ebx = &(registers[0]);
+            int* const edx = &(registers[0]);
+            int* const ecx = &(registers[0]);
+            if (!(__get_cpuid(0, eax, ebx, ecx, edx)))
             {
                 fprintf(stderr, " [!] __get_cpuid() produced an error");
             }
