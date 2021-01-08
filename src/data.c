@@ -1,9 +1,13 @@
 #include "include/data.h"
 #include "ptimer.h"
 #include <assert.h>
+#include <stdbool.h>
 
-data_string_t* const mem_metric_str[6] = {"Bytes (B)","Kilobytes (KB)","Megabytes (MB)","Gigabytes (GB)","Terabytes (TB)","Petabytes (PB)"};
-data_string_t* const time_metric_str[5] = {"Seconds (s)", "Miliseconds (ms)", "Microseconds (mms)", "Nanoseconds(ns)", "System Clocks"};
+data_string_t* const mem_metric_str[6] = {"Bytes","Kilobytes","Megabytes","Gigabytes","Terabytes","Petabytes"};
+data_string_t* const time_metric_str[5] = {"Second", "Milisecond", "Microsecond", "Nanosecond", "System Clock Tick"};
+
+inline static void _metrics_set_labels(data_chart_t*);
+inline static int _metrics_get_unit_enum(int, bool);
 
 data_datacollect_t* create_dynm_datacollect(data_uint_t sample_count, data_uint_t depend_count, data_size_t* array_sizes, data_size_t* strides)
 {
@@ -91,32 +95,39 @@ data_chart_t* create_dynm_chart(data_datacollect_t* data, data_chartdetails_t me
     ret_graph->metrics = met;
     ret_graph->order = ord;
 
-    switch(ret_graph->metrics.size_measure.units)
-    {
-        case mem_units_default:
-            ret_graph->x_label = mem_metric_str[0];
-            break;
-        default:
-            ret_graph->x_label = mem_metric_str[(int)ret_graph->metrics.size_measure.units];
-            break;
-    }
-    switch(ret_graph->metrics.stride_measure.units)
-    {
-        case mem_units_default:
-            ret_graph->y_label = mem_metric_str[0];
-            break;
-        default:
-            ret_graph->y_label = mem_metric_str[(int)ret_graph->metrics.stride_measure.units];
-            break;
-    }
-    switch(ret_graph->metrics.time_measure.units)
-    {
-        case time_units_default:
-            ret_graph->z_label = time_metric_str[0];
-            break;
-        default:
-            ret_graph->z_label = time_metric_str[(int)ret_graph->metrics.time_measure.units];
-            break;
-    }
+    _metrics_set_labels(ret_graph);
+
     return ret_graph;
+}
+
+static int _metrics_get_unit_enum(int value, bool tmem_ftime)
+{
+    if (tmem_ftime)
+    {
+        switch(value)
+        {
+            case mem_units_default:
+                return mem_units_bytes;
+            default:
+                return value;
+        }
+    }
+    else
+    {
+        switch(value)
+        {
+            case time_units_default:
+                return time_units_seconds;
+            default:
+                return value;
+        }
+    }
+    
+}
+static void _metrics_set_labels(data_chart_t* graph)
+{
+    graph->x_label = mem_metric_str[_metrics_get_unit_enum(graph->metrics.size_measure.units, true)];
+    graph->y_label = mem_metric_str[_metrics_get_unit_enum(graph->metrics.stride_measure.units, true)];
+    graph->num_z_label = mem_metric_str[_metrics_get_unit_enum(graph->metrics.time_measure.units, true)];
+    graph->den_z_label = mem_metric_str[_metrics_get_unit_enum(graph->metrics.time_measure.per_time_units, false)];
 }

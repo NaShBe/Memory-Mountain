@@ -104,13 +104,14 @@ typedef struct data_chartdetails_t
 
 typedef struct data_chart_t
 {
-    data_datacollect_t*     data;       // data associated with the chart
-    data_chartdetails_t     metrics;    // chart details
-    data_charptr_t          label;      // label of the chart
-    data_string_t           x_label;    // label for array size
-    data_string_t           y_label;    // label for stride size
-    data_string_t           z_label;    // label for read throughput
-    data_label_order_enum   order;      // determines the orientation of the chart
+    data_datacollect_t*     data;           // data associated with the chart
+    data_chartdetails_t     metrics;        // chart details
+    data_charptr_t          label;          // label of the chart
+    data_string_t           x_label;        // label for array size
+    data_string_t           y_label;        // label for stride size
+    data_string_t           num_z_label;    // label for read throughput in mem units
+    data_string_t           den_z_label;    // label for read throughput in time units
+    data_label_order_enum   order;          // determines the orientation of the chart
 } data_chart_t;
 
 extern data_datacollect_t* create_dynm_datacollect(data_uint_t, data_uint_t, data_size_t*, data_size_t*);
