@@ -8,7 +8,7 @@
 extern "C"{
 #endif
 
-#if defined(SYS_OS_WIN32) || defined(SYS_OS_WIN64)
+#if PORT_SYS_OS == SYS_OS_WIN32 || PORT_SYS_OS == SYS_OS_WIN64
     #include <profileapi.h>
     #define PTIMER_TYPE LARGE_INTEGER*
     #define PTIMER_START(x) PTIMER_TYPE _end; PTIMER_TYPE _freq; \
@@ -17,9 +17,10 @@ extern "C"{
     #define PTIMER_STOP(x) QueryPerformanceCounter(_end);\
         x->QuadPart -= _end->QuadPart
     #define PTIMER_ELAPSED(x) (double)(x->QuadPart)/_freq->QuadPart
-#elif defined(SYS_OS_MACOS) || defined(SYS_OS_MACOSX)
+#elif PORT_SYS_OS == SYS_OS_MACOS || PORT_SYS_OS == SYS_OS_MACOSX
     #include <mach/mach_time.h>
 #else
+    #error There are no timers specified for your system.
 #endif
 
 
