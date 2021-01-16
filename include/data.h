@@ -20,6 +20,19 @@
 extern "C"{
 #endif
 
+typedef enum data_represent_enum
+{
+    raw,
+    mean,
+    median,
+    mode,
+    variance,
+    deviation,
+    zscore
+} data_represent_enum;      // when drawing the graph, this enum determines how read-throughput is represented/averaged
+
+
+
 typedef enum data_mem_units_enum
 {
     mem_units_bytes,
@@ -29,7 +42,7 @@ typedef enum data_mem_units_enum
     mem_units_terabytes,
     mem_units_petabytes,
     mem_units_default
-} data_mem_units_enum;
+} data_mem_units_enum;      // when measuring memeory size, this enum determines the metrics used
 
 typedef enum data_time_units_enum
 {
@@ -39,7 +52,7 @@ typedef enum data_time_units_enum
     time_units_nanoseconds,
     time_units_clock_ticks,
     time_units_default
-} data_time_units_enum;
+} data_time_units_enum;     // when measuring time, this enum determines the metrics used
 
 typedef enum data_label_order_enum
 {
@@ -50,7 +63,7 @@ typedef enum data_label_order_enum
     YZX,
     YXZ,
     order_default
-} data_label_order_enum;
+} data_label_order_enum;    // this enum changes how the graph is oriented (X = array size, Y = stride, Z = read-throughput)
 
 typedef _USER_DATA_TYPE         data_arrval_t;  // user-defined data type for array
 typedef volatile data_arrval_t  data_pool_t;    // where array access is made for addition method

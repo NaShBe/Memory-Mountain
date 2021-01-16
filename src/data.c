@@ -14,6 +14,10 @@ data_datacollect_t* create_dynm_datacollect(data_uint_t sample_count, data_uint_
     assert(sample_count > 0 && depend_count > 0);
     assert(array_sizes != NULL && strides != NULL);
     data_datacollect_t* ret_datacoll = malloc(sizeof(data_datacollect_t));
+    if (ret_datacoll == NULL)
+    {
+        return NULL;
+    }
     ret_datacoll->coll_set_count = sample_count;
     ret_datacoll->coll_data = malloc((sizeof(data_dataset_t) + sizeof(data_real_t) * depend_count) * sample_count);
     
@@ -47,7 +51,7 @@ void collect_data(data_datacollect_t* data)
             {
                 PTIMER_TYPE timer;
                 PTIMER_START(timer);
-                for (register int i = 0; i < data_arr_count; i++)
+                for (register int i = 0; i < data_arr_count; i+=data->coll_data[itr].set_elem_stride)
                 {
                     /*
                         register's use here is only because it will most closely represent the time needed solely to 
@@ -65,7 +69,7 @@ void collect_data(data_datacollect_t* data)
             {
                 PTIMER_TYPE timer;
                 PTIMER_START(timer);
-                for (register int i = 0; i < data_arr_count; i++)
+                for (register int i = 0; i < data_arr_count; i+=data->coll_data[itr].set_elem_stride)
                 {
                     data_array[i]++;
                 }
@@ -83,7 +87,6 @@ void collect_data(data_datacollect_t* data)
 
 data_chart_t* create_dynm_chart(data_datacollect_t* data, data_chartdetails_t met, data_charptr_t label, data_label_order_enum ord)
 {
-
     assert(data != NULL && label != NULL);
     data_chart_t* ret_graph = malloc(sizeof(data_chart_t));
     if (ret_graph == NULL)
