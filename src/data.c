@@ -3,8 +3,8 @@
 #include <assert.h>
 #include <stdbool.h>
 
-data_string_t* const mem_metric_str[6] = {"Bytes","Kilobytes","Megabytes","Gigabytes","Terabytes","Petabytes"};
-data_string_t* const time_metric_str[5] = {"Second", "Milisecond", "Microsecond", "Nanosecond", "System Clock Tick"};
+mm_strltr_t* const mem_metric_str[6] = {"Bytes","Kilobytes","Megabytes","Gigabytes","Terabytes","Petabytes"};
+mm_strltr_t* const time_metric_str[5] = {"Second", "Milisecond", "Microsecond", "Nanosecond", "System Clock Tick"};
 
 inline static void _metrics_set_labels(data_chart_t*);
 inline static int _metrics_get_unit_enum(int, bool);
@@ -81,7 +81,7 @@ void collect_data(data_datacollect_t* data)
     return;
 }
 
-data_chart_t* create_dynm_chart(data_datacollect_t* data, data_chartdetails_t met, data_charptr_t label, data_label_order_enum ord)
+data_chart_t* create_dynm_chart(data_datacollect_t* data, data_chartdetails_t met, mm_charptr_t label, data_label_order_enum ord)
 {
 
     assert(data != NULL && label != NULL);

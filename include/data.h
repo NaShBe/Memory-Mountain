@@ -13,6 +13,7 @@
 #endif
 
 #include "include/sysinfo.h"
+#include "include/types.h"
 #include <stdint.h>
 #include <stdlib.h>
 
@@ -58,8 +59,6 @@ typedef intmax_t                data_int_t;     // represents a signed integer
 typedef uintmax_t               data_uint_t;    // represents an unsigned integer
 typedef double                  data_real_t;    // represents a real-number representation
 typedef size_t                  data_size_t;    // represents a measure of memory space in bytes
-typedef const char*             data_string_t;  // represents a safe character string
-typedef char*                   data_charptr_t; // represents a standard character string
 
 typedef struct data_dataset_t
 {
@@ -106,17 +105,17 @@ typedef struct data_chart_t
 {
     data_datacollect_t*     data;           // data associated with the chart
     data_chartdetails_t     metrics;        // chart details
-    data_charptr_t          label;          // label of the chart
-    data_string_t           x_label;        // label for array size
-    data_string_t           y_label;        // label for stride size
-    data_string_t           num_z_label;    // label for read throughput in mem units
-    data_string_t           den_z_label;    // label for read throughput in time units
+    mm_charptr_t          label;          // label of the chart
+    mm_strltr_t           x_label;        // label for array size
+    mm_strltr_t           y_label;        // label for stride size
+    mm_strltr_t           num_z_label;    // label for read throughput in mem units
+    mm_strltr_t           den_z_label;    // label for read throughput in time units
     data_label_order_enum   order;          // determines the orientation of the chart
 } data_chart_t;
 
 extern data_datacollect_t* create_dynm_datacollect(data_uint_t, data_uint_t, data_size_t*, data_size_t*);
 extern void collect_data(data_datacollect_t*);
-extern data_chart_t* create_dynm_chart(data_datacollect_t*, data_chartdetails_t, data_charptr_t, data_label_order_enum);
+extern data_chart_t* create_dynm_chart(data_datacollect_t*, data_chartdetails_t, mm_charptr_t, data_label_order_enum);
 
 #ifdef __cplusplus__
 }

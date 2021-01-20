@@ -1,12 +1,11 @@
 #include "include/sysinfo.h"
 #include "include/port.h"
+#include "include/types.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
 
-static const data_sys_t _null_data_sys = {NULL, 0, NULL, 0, NULL, 0, NULL, 0, 0, 0, 0.0, 0, NULL};
-static const char str_unknown[] = "Undetermined";
 data_sys_t* get_data_sys()
 {
     return NULL;
@@ -24,31 +23,69 @@ static void _perf_data_sys_coll(data_sys_t** _data)
 
 static void _perf_help_cpu_coll(data_sys_t* data)
 {
-    #if PORT_SYS_ARCH == SYS_ARCH_X86 || PORT_SYS_ARCH == SYS_ARCH_X86_64
-        #if PORT_SYS_COMP == SYS_COMP_MSVC
-            #include <intrin.h>
-            #include <limits.h>
-            int registers[4];
-            int leaf;
+    assert(data != NULL);
+
+    #if PORT_SYS_ARCH == SYS_ARCH_X86 || PORT_SYS_ARCH == SYS_ARCH_X86_64 
+        #include "include/cpuidinterp.h"
+        #define cpuid_param(x, y, z) assert (z >= CPUIDEAX_HIGHEST_FUNCT && z <= highest_param); \
+            y = z; __cpuid(x, y)
+        int registers[4];
+        enum reg_enum
+        {
+            eax,
+            ebx,
+            ecx,
+            edx
+        } reg_enum;
+        __cpuid(registers, CPUIDEAX_HIGHEST_FUNCT);
+        int highest_param = registers[0];
+        int leaf;
+
+        mm_strltr_t const vendor_str[] = 
+        {
+            "AMDisbetter!", "AuthenticAMD", "Centaurhuals", "CyrixInstead",
+            "GenuineIntel", "TransmetaCPU", "GenuineTMx68", "Geode by NSC",
+            "NexGenDriven", "RiseRiseRise", "Sis Sis Sis ", "UMC UMC UMC ",
+            "VIA VIA VIA ", "Vortex86 SoC", "  Shanghai  ", "HygonGenuine",
+            "E2K MACHINE", "GenuineAO486", "bhyve bhyve ", " KVMKVMKVM ",
+            "TCGTCGTCGTCG", "Microsoft Hv", " lrpepyh Hv ", "VMwareVMware",
+            "XenVMMXenVMM", "ACRNACRNACRN", " QNXQVMBSQG ", "VirtualApple"
+        };
+        
+        union sys_cpubrand
+        {
+            int val[4];
+            mm_char_t venstr[sizeof(int) * 4];
+        } sys_cpubrand;
+
+        cpuid_param(registers, leaf, CPUIDEAX_HIGHEST_FUNCT);
+        sys_cpubrand.val[0] = registers[ebx];
+        sys_cpubrand.val[1] = registers[edx];
+        sys_cpubrand.val[2] = registers[ecx];
+        sys_cpubrand.val[3] = 0;
+
+        if
+        (
+            !strcmp(sys_cpubrand.venstr, vendor_str[0]) ||
+            !strcmp(sys_cpubrand.venstr, vendor_str[1])
+        )
+        {
+            // define cpu type
+            1;
+        }
+
+        if (highest_param >= CPUIDEAX_PROCESSORSTR3)
+        {
+            int brand_string[12] = 0;
+            cpuid_param(brand_string+0, leaf, CPUIDEAX_PROCESSORSTR1);
+            cpuid_param(brand_string+4, leaf, CPUIDEAX_PROCESSORSTR2);
+            cpuid_param(brand_string+8, leaf, CPUIDEAX_PROCESSORSTR3);
+            write_to_string(brand_string, data->sys_cpu_brand_str);
+        }
+        else
+        {
             
-            __cpuid(registers, leaf);
-            
-        #elif PORT_SYS_COMP == SYS_COMP_GCC || PORT_SYS_COMP == SYS_COMP_CLANG
-            #include <cpuid.h>
-            int registers[4];
-            int* const eax = &(registers[0]);
-            int* const ebx = &(registers[0]);
-            int* const edx = &(registers[0]);
-            int* const ecx = &(registers[0]);
-            if (!(__get_cpuid(0, eax, ebx, ecx, edx)))
-            {
-                fprintf(stderr, " [!] __get_cpuid() produced an error");
-            }
-            else
-            {
-                
-            }
-        #endif
+        }
     #else
         #error There is no data collection implementation for your current OS.
     #endif
