@@ -4,6 +4,8 @@
 #include "port.h"
 #include <assert.h>
 
+
+
 #ifdef __cplusplus__
 extern "C"{
 #endif
@@ -17,8 +19,13 @@ extern "C"{
     #define PTIMER_STOP(x) QueryPerformanceCounter(_end);\
         x->QuadPart -= _end->QuadPart
     #define PTIMER_ELAPSED(x) (double)(x->QuadPart)/_freq->QuadPart
-#elif PORT_SYS_OS == SYS_OS_MACOS || PORT_SYS_OS == SYS_OS_MACOSX
+#elif PORT_SYS_OS == SYS_OS_MACOSX
     #include <mach/mach_time.h>
+    extern double _ptimer_mac_scale(PTIMER_TYPE);
+    #define PTIMER_TYPE uint64_t
+    #define PTIMER_START(x) PTIMER_TYPE _end; x = mach_absolute_time()
+    #define PTIMER_STOP(x) _end = mach_absolute_time(); x = _end - x;
+    #define PTIMER_ELAPSED(x) _ptimer_mac_scale(x)
 #else
     #error There are no timers specified for your system.
 #endif
