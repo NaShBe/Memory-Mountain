@@ -2,6 +2,7 @@
 #define NASHBE_CPUIDINTERP_H
 
 #include "types.h"
+#include "sysinfo.h"
 #if PORT_SYS_COMP == SYS_COMP_MSVC
 #include <intrin.h>
 #elif PORT_SYS_COMP == SYS_COMP_GCC || PORT_SYS_COMP == SYS_COMP_CLANG
@@ -31,13 +32,14 @@
 extern "C"{
 #endif
 
-extern void         cpu_get_manufacturer_str(mm_string_t);
-extern void         cpuid_get_brandstring(mm_string_t);
-extern void         cpuid_get_cache_tlb();
-extern mm_uint_t    cpuid_get_logical_cores();
-extern mm_uint_t    cpuid_get_physical_cores();
-
-
+extern void         cpuid_init();
+extern void         cpuid_get_manufacturer_str(mm_stringptr_t);
+extern void         cpuid_get_brandstring(mm_stringptr_t);
+extern void         cpuid_get_logical_cores(mm_uint_t*);
+extern void         cpuid_get_physical_cores(mm_uint_t*);
+extern void         cpuid_get_cache_l1_details(cache_infoptr_t);
+extern void         cpuid_get_cache_l2_details(cache_infoptr_t);
+extern void         cpuid_get_cache_l3_details(cache_infoptr_t);
 
 #ifdef __cplusplus__
 }

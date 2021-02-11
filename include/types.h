@@ -1,7 +1,7 @@
 #ifndef NASHBE_TYPES_H
 #define NASHBE_TYPES_H
 
-#include "port.h"
+#include "include/port.h"
 #include <stdbool.h>
 #include <stdint.h>
 #include <limits.h>
@@ -24,10 +24,12 @@ typedef float                   mm_float_t;     // generalized floating point re
 // Library data primitives
 typedef bool                    mm_bool_t;
 #if CHAR_BIT % 8 == 0 && CHAR_BIT % 16 != 0
+#define BITCHECK8
 typedef int8_t                  mm_int8_t;
 typedef uint8_t                 mm_uint8_t;
 #endif
 #if CHAR_BIT % 8 == 0 || CHAR_BIT % 16 == 0
+#define BITCHECK16
 typedef int16_t                 mm_int16_t;
 typedef uint16_t                mm_uint16_t;
 typedef int32_t                 mm_int32_t;
@@ -46,15 +48,29 @@ typedef intmax_t                mm_intmax_t;
 typedef uintmax_t               mm_uintmax_t;
 
 // project-defined types
-typedef struct mm_string_t      mm_string_t;    // string representation
+typedef struct mm_string_t      mm_string_t, *mm_stringptr_t;    // string representation
 struct mm_string_t
 {
-    mm_charptr_t    str;                        // pointer to DYNAMICALLY allocated string
-    size_t          len;                        // lenght of that string
+    mm_charptr_t    str;                        // pointer to DYNAMICALLY allocated character array
+    size_t          len;                        // lenght of the string
 };
 
-extern void write_to_string(char* const, mm_string_t);
-extern void free_string(mm_string_t);
+typedef struct mm_bintree_t         mm_bintree_t, *mm_bintreeptr_t;
+struct mm_bintree_t
+{
+    mm_bintreeptr_t left;
+    mm_bintreeptr_t right;
+    #ifdef BITCHECK8
+    mm_uint8_t data[];
+    #else
+    mm_char_t data[];
+    #endif
+};
+
+
+extern mm_string_t*     create_string(char* const);
+extern void             write_to_string(mm_string_t*, char* const);
+extern void             free_string(mm_string_t**);
 
 #ifdef __cplusplus__
 }
