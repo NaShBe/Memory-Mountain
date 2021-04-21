@@ -1,7 +1,7 @@
 #ifndef NASHBE_SYSINFO_H
 #define NASHBE_SYSINFO_H
 
-#include "include/types.h"
+#include "types.h"
 #include <stdint.h>
 
 #ifdef __cplusplus__

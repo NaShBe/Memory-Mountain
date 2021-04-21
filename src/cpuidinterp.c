@@ -1,6 +1,8 @@
 #include "include/cpuidinterp.h"
 #include "string.h"
 
+// Define a macro for portable use of __cpuid (currently produces errors in macos)
+
 static mm_strltr_t const vendor_str[] = 
 {
     "AMDisbetter!", "AuthenticAMD", "Centaurhuals", "CyrixInstead",

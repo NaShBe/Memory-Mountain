@@ -13,16 +13,18 @@ data_sys_t* get_data_sys()
 
 static void _perf_data_sys_coll(data_sys_t** _data)
 {
-    
+    return;
 }
 
 static void _perf_help_cpu_coll(data_sys_t* data)
 {
     assert(data != NULL);
 
-    #if PORT_SYS_ARCH == SYS_ARCH_X86 || PORT_SYS_ARCH == SYS_ARCH_X86_64 
+    #if PORT_SYS_ARCH == SYS_ARCH_X86 || PORT_SYS_ARCH == SYS_ARCH_X86_64
         #include "include/cpuidinterp.h"
     #endif
+    data;
+    return;
 }
 
 static void _perf_help_sysctl_str(int* info, size_t size, char** str, size_t* strlen, int name)
