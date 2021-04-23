@@ -37,9 +37,9 @@ extern void         cpuid_get_manufacturer_str(mm_stringptr_t);
 extern void         cpuid_get_brandstring(mm_stringptr_t);
 extern void         cpuid_get_logical_cores(mm_uint_t*);
 extern void         cpuid_get_physical_cores(mm_uint_t*);
-extern void         cpuid_get_cache_l1_details(cache_infoptr_t);
-extern void         cpuid_get_cache_l2_details(cache_infoptr_t);
-extern void         cpuid_get_cache_l3_details(cache_infoptr_t);
+extern void         cpuid_get_cache_l1_details(sys_cacheptr_t);
+extern void         cpuid_get_cache_l2_details(sys_cacheptr_t);
+extern void         cpuid_get_cache_l3_details(sys_cacheptr_t);
 
 #ifdef __cplusplus__
 }

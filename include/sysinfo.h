@@ -8,7 +8,7 @@
 extern "C"{
 #endif
 
-typedef enum cache_type_enum
+typedef enum sys_cache_type_enum
 {
     cache_type_L1I,
     cache_type_L1D,
@@ -18,9 +18,9 @@ typedef enum cache_type_enum
     cache_type_TLBD,
     cache_type_TLBI,
     cache_type_NA
-} cache_type_enum;
+} sys_cache_type_enum;
 
-typedef enum cpu_isa_enum
+typedef enum sys_cpu_isa_enum
 {
     cpu_isa_x86,
     cpu_isa_x64,
@@ -29,9 +29,9 @@ typedef enum cpu_isa_enum
     cpu_isa_mips,
     cpu_isa_sparc,
     cpu_isa_riscv
-} cpu_isa_enum;
+} sys_cpu_isa_enum;
 
-typedef enum mem_type_enum
+typedef enum sys_mem_type_enum
 {
     mem_type_SRAM,
     mem_type_DRAM,
@@ -42,23 +42,23 @@ typedef enum mem_type_enum
     mem_type_DDR3,
     mem_type_DDR4,
     mem_type_NA
-} mem_type_enum;
+} sys_mem_type_enum;
 
-typedef struct cache_details_t
+typedef struct sys_cache_body_t
 {
     mm_uint_t   cache_line_size;
     mm_uint_t   cache_associativity;
     mm_uint_t   cache_sector_lines;
-} cache_details_t, *cache_detptr_t;
+} sys_cache_body_t, *sys_cache_bodyptr_t;
 
-typedef struct cache_info_t
+typedef struct sys_cache_t
 {
-    cache_type_enum type;
+    sys_cache_type_enum type;
     mm_uint_t       cache_size;
-    cache_detptr_t  details;
-} cache_info_t, *cache_infoptr_t;
+    sys_cache_bodyptr_t  details;
+} sys_cache_t, *sys_cacheptr_t;
 
-typedef struct data_sys_t
+typedef struct sys_data_t
 {
     mm_string_t     sys_model_name;
     mm_string_t     sys_os_type;
@@ -68,14 +68,14 @@ typedef struct data_sys_t
     mm_uint_t       sys_cpu_count;      
     mm_uint_t       sys_cpu_frequency;  // this is in hertz
 
-    mem_type_enum   sys_mem_type;
+    sys_mem_type_enum   sys_mem_type;
     mm_uint_t       sys_mem_size;       // this is in bytes
 
     mm_uint_t       sys_cache_num;
-    cache_infoptr_t sys_cache;
-} data_sys_t, *data_sysptr_t;
+    sys_cacheptr_t sys_cache;
+} sys_data_t, *sys_dataptr_t;
 
-extern data_sysptr_t    get_data_sys();
+extern sys_dataptr_t    get_data_sys();
 
 #ifdef __cplusplus__
 }

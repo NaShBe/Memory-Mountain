@@ -69,17 +69,17 @@ void cpuid_get_physical_cores(mm_uint_t* num)
 
 }
 
-void cpuid_get_cache_l1_details(cache_infoptr_t info)
+void cpuid_get_cache_l1_details(sys_cacheptr_t info)
 {
 
 }
 
-void cpuid_get_cache_l2_details(cache_infoptr_t info)
+void cpuid_get_cache_l2_details(sys_cacheptr_t info)
 {
 
 }
 
-void cpuid_get_cache_l3_details(cache_infoptr_t info)
+void cpuid_get_cache_l3_details(sys_cacheptr_t info)
 {
 
 }

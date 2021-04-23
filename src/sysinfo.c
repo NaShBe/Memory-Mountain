@@ -6,17 +6,17 @@
 #include <string.h>
 #include <assert.h>
 
-data_sys_t* get_data_sys()
+sys_data_t* get_data_sys()
 {
     return NULL;
 }
 
-static void _perf_data_sys_coll(data_sys_t** _data)
+static void _perf_data_sys_coll(sys_data_t** _data)
 {
     return;
 }
 
-static void _perf_help_cpu_coll(data_sys_t* data)
+static void _perf_help_cpu_coll(sys_data_t* data)
 {
     assert(data != NULL);
 
