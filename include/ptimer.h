@@ -4,8 +4,6 @@
 #include "port.h"
 #include <assert.h>
 
-
-
 #ifdef __cplusplus__
 extern "C"{
 #endif
@@ -29,7 +27,6 @@ extern "C"{
 #else
     #error Could not obtain timers for your system.
 #endif
-
 
 #ifdef __cplusplus__
 }
