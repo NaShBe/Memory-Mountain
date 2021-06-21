@@ -33,25 +33,29 @@ typedef enum data_avg_method_enum       // method to use for averaging samples p
 typedef struct data_struct_accesses_t   // accesses used for data structure test
 {
     mm_string_t*    name;           // data structure name, used mainly for graph labeling
+    mm_bool_t       is_array;       // used to check if indexes[] should be null or data_struct_accesses_t instance is corrupted
     unsigned int    num_index;      // indexes count
-    void*           indexes[];      // indexes which are accessed, set to null if data structure is accessed dynamically
+    unsigned int    stride;         // stride between indexes (used for arrays, ignored if indexes[] is NOT null)         
+    unsigned int    size;           // size of elements (used for arrays, ignored if indexes[] is NOT null)
+    void*           data;           // entry point for data structure
+    void*           indexes/*[]*/;      // indexes which are accessed, set to null if data structure is an array
 } data_struct_accesses_t;
 
 typedef struct data_variable_head_t     // represents metadata for variable (either independent or dependent) in a test
 {
-    mm_string_t             label;      // name of variable, used when labeling axis on graph
+    mm_string_t*            label;      // name of variable, used when labeling axis on graph
     data_measure_type_enum  measure;    // type of measurement
 } data_variable_head_t;
 
 typedef struct data_independent_t
 {
-    data_variable_head_t    metadata;   // data pertaining to the independent variable
+    data_variable_head_t*   metadata;   // data pertaining to the independent variable
     mm_dpfloat_t*           values;     // data collected, count determined by data_test_t struct
 } data_independent_t;
 
 typedef struct data_dependent_t
 {
-    data_variable_head_t    metadata;   // data pertaining to the dependent variable
+    data_variable_head_t*   metadata;   // data pertaining to the dependent variable
     mm_dpfloat_t*           averages;   // value calculated based on data_avg_method_enum
     mm_dpfloat_t*           samples;    // test values, grouped to calculate averages
 } data_dependent_t;
