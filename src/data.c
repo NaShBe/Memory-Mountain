@@ -164,32 +164,42 @@ void perform_test(data_test_t* test)
     assert(test != NULL);
     if (test->metadata.test_type != test_data_structure)
     {
-        register char* const restrict data_reg_retrival;    // to most accurately measure time, offsets are calculated from register instead of retrieving the value from memory every time
+        /*
+            When a test is performed, the following algorithm is performed:
+                1) determine test type
+                    a) if the test is of an array type (i.e. not test_data_structure):
+                        i) obtain the address of the array and store it (preferably on the register)
+                        ii) for every test point, get the time required to read every byte of an element from the array
+                        iii) repeat this for the set number of samples
 
+                    b) if the test is of data structure type (i.e. is test_data_structure)
+                        i) obtain the adress of the index list and store it (preferably on the register)
+                        ii) for every test point, get the time required to read every byte of the addressed element
+                        iii) repeat this for the set number of samples
+        */
+        register const volatile char* const data_array = test->data.dst_values->data;    // the array data is accessed through this pointer
+        for (mm_uint_t i = 0; i < test->metadata.sample_count; i++)
+        {
+            for (mm_uint_t j = 0; j < test->metadata.num_test_points; j++)
+            {
+                register mm_uint_t curr_index = j * test->data.dst_values->stride;
+                PTIMER_TYPE timer;
+                PTIMER_START(timer);
+                // TIME SENSITIVE CODE BEGINS HERE //
+                for (register mm_uint_t k = 0; k < test->data.dst_values->size; k++)
+                {
+                    data_array[curr_index + k]; // each byte of every index is accessed
+                }
+                // TIME SENSITIVE CODE ENDS HERE //
+                PTIMER_STOP(timer);
+                double time_elapsed = PTIMER_ELAPSED(timer);
+                test->data.dependent->samples[j+i] = time_elapsed;
+            }
+        }
     }
     else
     {
-        register char* restrict data_reg_retrival;
+        register char* data_reg_retrival;
     }
 
-}
-
-void record_cache_miss()    // ignores sample_count, must rely on timer error calculation
-{
-    /*
-        Because cache is established after memory is requested (assuming no switches),
-        cache misses cannot be accurately recorded on multiple access attempts to the
-        same location. For this reason, only one sample should be taken with error
-        calculated separately.
-
-        To improve the chance of recording accurate data, avoid launching other applications
-        and use an array/data structure with many entries.
-    */
-}
-
-void record_cache_hit() // assumes cache establishes memory, can't be used for dynamic data collection
-{
-    /*
-        
-    */
 }
