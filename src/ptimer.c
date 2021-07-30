@@ -1,4 +1,4 @@
-#include "include/ptimer.h"
+#include "ptimer.h"
 
 
 #if PORT_SYS_OS == SYS_OS_MACOSX

@@ -1,6 +1,6 @@
-#include "include/sysinfo.h"
-#include "include/port.h"
-#include "include/types.h"
+#include "sysinfo.h"
+#include "port.h"
+#include "types.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>

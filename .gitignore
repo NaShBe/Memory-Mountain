@@ -1,4 +1,9 @@
-/.DS_Store
-/experiment
-/.vscode
-/old
+.DS_Store
+experiment
+.vscode
+old
+.cmake
+CmakeFiles
+configure.bat
+build.bat
+run.bat

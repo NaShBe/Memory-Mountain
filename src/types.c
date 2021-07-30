@@ -1,4 +1,4 @@
-#include "include/types.h"
+#include "types.h"
 #include "string.h"
 
 mm_string_t* create_string(char* const string)

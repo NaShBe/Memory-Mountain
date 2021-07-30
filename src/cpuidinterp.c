@@ -1,4 +1,4 @@
-#include "include/cpuidinterp.h"
+#include "cpuidinterp.h"
 #include "string.h"
 
 // Define a macro for portable use of __cpuid (currently produces errors in macos)
