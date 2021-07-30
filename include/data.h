@@ -65,9 +65,9 @@ typedef struct data_test_t      // holds all data for a test
     struct
     {
         data_test_enum          test_type;
-        mm_uint_t               num_test_points;
-        mm_uint_t               sample_count;
         data_avg_method_enum    avg_method;
+        mm_uint_t               test_point_count;
+        mm_uint_t               sample_count;
     } metadata;
     struct
     {

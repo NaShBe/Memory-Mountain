@@ -133,7 +133,7 @@ data_test_t* create_test(data_test_enum test_type, data_avg_method_enum avg_meth
     assert(test != NULL);
     test->metadata.test_type = test_type;
     test->metadata.sample_count = 0;
-    test->metadata.num_test_points = 0;
+    test->metadata.test_point_count = 0;
     test->metadata.avg_method = avg_method;
     test->data.dst_values = NULL;
     test->data.x_ind = NULL;
@@ -149,7 +149,7 @@ bool provide_data_to_test(data_test_t* test, data_struct_accesses_t* dst_data)
         if (dst_data->is_array)
         {
             test->data.dst_values = dst_data;
-            test->metadata.num_test_points = dst_data->num_index;
+            test->metadata.test_point_count = dst_data->num_index;
         }
         else
         {
@@ -180,7 +180,7 @@ void perform_test(data_test_t* test)
         register const volatile char* const data_array = test->data.dst_values->data;    // the array data is accessed through this pointer
         for (mm_uint_t i = 0; i < test->metadata.sample_count; i++)
         {
-            for (mm_uint_t j = 0; j < test->metadata.num_test_points; j++)
+            for (mm_uint_t j = 0; j < test->metadata.test_point_count; j++)
             {
                 register mm_uint_t curr_index = j * test->data.dst_values->stride;
                 PTIMER_TYPE timer;

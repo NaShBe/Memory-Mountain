@@ -1,0 +1,6 @@
+[submodule "extern/xlsx_io"]
+	path = extern/xlsx_io
+	url = https://github.com/brechtsanders/xlsxio.git
+[submodule "extern/wxWidgets"]
+	path = extern/wxWidgets
+	url = https://github.com/wxWidgets/wxWidgets.git
