@@ -5,7 +5,8 @@
 extern "C"{
 #endif
 
-#include "sysinfo.h"
+#include "types.h"
+#include "ptimer.h"
 
 typedef enum data_measure_type_enum // type of measurement used for an independent or dependent variable
 {
@@ -30,16 +31,72 @@ typedef enum data_avg_method_enum       // method to use for averaging samples p
     avg_method_mode                     // take the mode of the samples
 } data_avg_method_enum;
 
-typedef struct data_struct_accesses_t   // accesses used for data structure test
+typedef enum data_data_struct_type_enum
 {
-    mm_string_t*    name;           // data structure name, used mainly for graph labeling
-    mm_bool_t       is_array;       // used to check if indexes[] should be null or data_struct_accesses_t instance is corrupted
-    unsigned int    num_index;      // indexes count
-    unsigned int    stride;         // stride between indexes (used for arrays, ignored if indexes[] is NOT null)         
-    unsigned int    size;           // size of elements (used for arrays, ignored if indexes[] is NOT null)
-    void*           data;           // entry point for data structure
-    void*           indexes/*[]*/;      // indexes which are accessed, set to null if data structure is an array
-} data_struct_accesses_t;
+    data_struct_general,
+    data_struct_array,
+    data_struct_linked_list,
+    data_struct_binary_tree
+} data_data_struct_type_enum, data_dst_type_enum;
+
+typedef struct data_generic_entry_t
+{
+    mm_uint_t   avg_offset;
+    mm_uint_t   elem_size;
+    mm_uint_t   elem_count;
+    PTIMER_TYPE time_elapsed;
+} data_generic_entry_t;
+
+typedef struct data_array_entry_t
+{
+    mm_uint_t   elem_stride;
+    mm_uint_t   elem_size;
+    mm_uint_t   elem_count;
+    PTIMER_TYPE time_elapsed;
+} data_array_entry_t;
+
+typedef struct data_data_struct_t
+{
+    struct
+    {
+        mm_string_t*        name;
+        data_dst_type_enum  dst_type;
+    } metadata;
+
+    void* data;
+} data_data_struct_t, data_dst_t;
+
+typedef struct data_array_t
+{
+    mm_uint_t       elem_size;
+    mm_uint_t       elem_stride;
+    mm_generic_t*   elements;
+} data_array_t;
+
+typedef struct data_linked_list_t
+{
+    mm_uint_t elem_size;
+    void* (*get_next_addr)(void*);
+    void* curr_node;
+} data_linked_list_t;
+
+typedef struct data_binary_tree_t
+{
+    mm_uint_t elem_size;
+    void* (*get_left_addr)(void*);
+    void* (*get_right_add)(void*);
+    void* curr_node;
+} data_binary_tree_t;
+
+typedef struct data_general_t
+{
+    mm_uint_t elem_size;
+    mm_uint_t elem_count;
+    void* (*get_next_elem)(void*);
+    void (*read_elem)(void*);
+    void* curr_elem;
+} data_general_t;
+
 
 typedef struct data_variable_head_t     // represents metadata for variable (either independent or dependent) in a test
 {
@@ -71,7 +128,7 @@ typedef struct data_test_t      // holds all data for a test
     } metadata;
     struct
     {
-        data_struct_accesses_t* dst_values;
+        data_dst_t*             dst_values;
         data_independent_t*     x_ind;
         data_independent_t*     y_ind;
         data_dependent_t*       dependent;

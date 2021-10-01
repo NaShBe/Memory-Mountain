@@ -11,15 +11,16 @@ extern "C"{
 #endif
 
 // C data primitives
-typedef const char*             mm_strltr_t;    // string literal representation
-typedef char*                   mm_charptr_t;   // character pointer representation
-typedef char                    mm_char_t;      // character representation
-typedef int                     mm_int_t;       // integer representation
-typedef unsigned int            mm_uint_t;      // unsigned integer representation
-typedef float                   mm_spfloat_t;   // single-point floating point representation
-typedef double                  mm_dpfloat_t;   // double-precision floating point representation
-typedef long double             mm_epfloat_t;   // extended-percision floating point representation
-typedef float                   mm_float_t;     // generalized floating point representation
+typedef const char*             mm_strltr_t;                    // string literal representation
+typedef char*                   mm_charptr_t;                   // character pointer representation
+typedef char                    mm_char_t;                      // character representation
+typedef int                     mm_int_t;                       // integer representation
+typedef unsigned int            mm_uint_t;                      // unsigned integer representation
+typedef float                   mm_spfloat_t;                   // single-point floating point representation
+typedef double                  mm_dpfloat_t;                   // double-precision floating point representation
+typedef long double             mm_epfloat_t;                   // extended-percision floating point representation
+typedef float                   mm_float_t;                     // generalized floating point representation
+typedef void                    mm_generic_t, mm_genericptr_t;  // represents pointer to address of unknown type
 
 // Library data primitives
 typedef bool                    mm_bool_t;
@@ -68,8 +69,8 @@ struct mm_bintree_t
 };
 
 
-extern mm_string_t*     create_string(char* const);
-extern void             write_to_string(mm_string_t*, char* const);
+extern mm_string_t*     create_string(char const* const);
+extern void             write_to_string(mm_string_t*, char const* const);
 extern void             free_string(mm_string_t**);
 
 #ifdef __cplusplus__

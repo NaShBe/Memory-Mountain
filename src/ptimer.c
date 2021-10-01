@@ -1,6 +1,5 @@
 #include "ptimer.h"
 
-
 #if PORT_SYS_OS == SYS_OS_MACOSX
 static PTIMER_TYPE _ptimer_mac_precision_scale(PTIMER_TYPE elapsed_time)
 {
