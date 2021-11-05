@@ -1,3 +1,10 @@
+/*
+    ptimer.h notes
+
+    - Each timer should return the most accurate time possible.
+    - Perhaps create
+*/
+
 #ifndef NASHBE_PTIMER_H
 #define NASHBE_PTIMER_H
 
@@ -27,9 +34,9 @@ extern "C"{
 #else
     #include <time.h>
     #define PTIMER_TYPE clock_t
-    #define PTIMER_START 
-    #define PTIMER_STOP
-    #define PTIMER_ELAPSED
+    #define PTIMER_START(x) 
+    #define PTIMER_STOP(x)
+    #define PTIMER_ELAPSED(x)
 #endif
 
 #ifdef __cplusplus__
